@@ -1,11 +1,12 @@
 const matchDatabase = require("../data/match")
+const log = require("../helperFunctions/log")
 
-const app = socket => {
-    console.log("socket Connection")
-    console.log(socket.id)
+const app = io => socket => {
+    log("socket Connection")
+    log(socket.id)
     
     socket.on("viewChanged", () => {
-        console.log("View Changed!")
+        log("View Changed!")
     })
     
     socket.on("createMatch", username => {

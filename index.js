@@ -12,4 +12,4 @@ const serverInstance = server.listen(PORT, () =>
 
 // Connect via webSocket
 const io = socket(serverInstance)
-io.on("connection", app)
+io.on("connection", app(io))
