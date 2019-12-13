@@ -1,4 +1,5 @@
 const RandomNumberGenny = require("../helperFunctions/RandomNumberGenny")
+const log = require("../helperFunctions/log")
 
 const matchArr = []
 const randomNumberGenerator = new RandomNumberGenny(36)
@@ -11,6 +12,8 @@ const createMatch = (username, socketId) => {
         players: [{ username, socketId }]
     }
     matchArr.push(newMatch)
+
+    log("New match created:", newMatch)
     return newMatch
 }
 
