@@ -1,7 +1,7 @@
 const RandomNumberGenny = require("../helperFunctions/RandomNumberGenny")
 const log = require("../helperFunctions/log")
 
-const matchArr = []
+let matchArr = []
 const randomNumberGenerator = new RandomNumberGenny(36)
 
 const createMatch = (username, socketId) => {
@@ -28,14 +28,8 @@ const findMatchById = matchId => {
 }
 
 const removeMatchById = matchId => {
-    const indexToRemove = matchArr.findIndex(match => match.id === matchId)
-    if (indexToRemove === -1) {
-        return 0
-    }
-    matchArr.splice(indexToRemove, 1)
-
+    matchArr = matchArr.filter(match => match.id !== matchId)
     randomNumberGenerator.remove(matchId)
-    return 1
 }
 
 module.exports = {

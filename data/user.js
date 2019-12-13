@@ -1,6 +1,6 @@
 const log = require("../helperFunctions/log")
 
-const userArr = []
+let userArr = []
 
 const createUser = (username, socketId) => {
     const newUser = { socketId, username }
@@ -21,12 +21,7 @@ const findUserById = socketId => {
 }
 
 const removeUserById = socketId => {
-    const indexToRemove = userArr.findIndex(user => user.socketId === socketId)
-    if (indexToRemove === -1) {
-        return 0
-    }
-    userArr.splice(indexToRemove, 1)
-    return 1
+    userArr = userArr.filter(user => user.socketId !== socketId)
 }
 
 module.exports = {
