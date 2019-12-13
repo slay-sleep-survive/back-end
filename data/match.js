@@ -25,7 +25,14 @@ const findMatchById = matchId => {
 }
 
 const removeMatchById = matchId => {
+    const indexToRemove = matchArr.findIndex(match => match.id === matchId)
+    if (indexToRemove === -1) {
+        return 0
+    }
+    matchArr.splice(indexToRemove, 1)
+
     randomNumberGenerator.remove(matchId)
+    return 1
 }
 
 module.exports = {
