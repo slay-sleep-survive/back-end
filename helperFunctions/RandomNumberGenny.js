@@ -18,4 +18,8 @@ module.exports = class RandomNumberGenny {
         }
         return rand
     }
+
+    remove = id => {
+        this.uniqueNumbers[id] = false;
+    }
 }
