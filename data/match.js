@@ -29,7 +29,7 @@ const addUserToMatch = (matchId, user) => {
     return updatedMatch // Return the newly updated match
 }
 
-const removeUserFromMatch = (matchId, user) => {
+const removeUserFromMatch = (matchId, socketId) => {
     let updatedMatch
     matchArr = matchArr.map(match => {
         // If our matchId matches up . . .
@@ -38,13 +38,13 @@ const removeUserFromMatch = (matchId, user) => {
             updatedMatch = {
                 ...match,
                 players: match.players.filter(
-                    player => player.socketId !== user.socketId
+                    player => player.socketId !== socketId
                 )
             }
 
             // If the user was the owner, set the next player as the new owner
             updatedMatch.owner =
-                updatedMatch.owner.socketId === user.socketId
+                updatedMatch.owner.socketId === socketId
                     ? updatedMatch.players[0]
                     : updatedMatch.owner
             return updatedMatch

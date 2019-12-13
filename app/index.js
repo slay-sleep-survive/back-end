@@ -14,24 +14,35 @@ const app = io => socket => {
         const user = userDatabase.createUser(username, socket.id)
         const newMatch = matchDatabase.createMatch(user)
         if (newMatch) {
-            socket.emit("matchCreated")
+            socket.join(newMatch.id)
             socket.emit("matchInfo", newMatch)
-            socket.emit("view", "GAME_SETTINGS")
         } else socket.emit("createMatchFail")
     })
 
     socket.on("joinMatch", (matchId, username) => {
         const user = userDatabase.createUser(username, socket.id)
         const joinMatch = matchDatabase.addUserToMatch(matchId, user)
-        if (newMatch) {
+        if (joinMatch) {
+            socket.join(joinMatch.id)
             socket.emit("matchInfo", joinMatch)
-            socket.emit("view", "GAME_SETTINGS")
+            socket.to(joinMatch.id).emit("playerJoined", joinMatch)
         } else socket.emit("joinMatchFail")
     })
 
     socket.on("findAllMatches", () => {
         const allMatches = matchDatabase.findAllMatches()
         socket.emit("allMatchesReturn", allMatches)
+    })
+
+    socket.on("disconnect", matchId => {
+        if (matchId) {
+            const updatedMatch = matchDatabase.removeUserFromMatch(
+                matchId,
+                socket.id
+            )
+            io.to(matchId).emit("playerLeave", updatedMatch)
+        }
+        userDatabase.removeUserById(socket.id)
     })
 }
 
