@@ -4,17 +4,53 @@ const log = require("../helperFunctions/log")
 let matchArr = []
 const randomNumberGenerator = new RandomNumberGenny(36)
 
-const createMatch = (username, socketId) => {
+const createMatch = user => {
     const id = randomNumberGenerator.generate()
     const newMatch = {
         id,
-        owner: { username, socketId },
-        players: [{ username, socketId }]
+        owner: user,
+        players: [user]
     }
     matchArr.push(newMatch)
 
     log("New match created:", newMatch)
     return newMatch
+}
+
+const addUserToMatch = (matchId, user) => {
+    let updatedMatch
+    matchArr = matchArr.map(match => {
+        // If out matchId matches up, add in our user
+        if (match.id === matchId) {
+            updatedMatch = { ...match, players: [...match.players, user] }
+            return updatedMatch
+        } else return match
+    })
+    return updatedMatch // Return the newly updated match
+}
+
+const removeUserFromMatch = (matchId, user) => {
+    let updatedMatch
+    matchArr = matchArr.map(match => {
+        // If our matchId matches up . . .
+        if (match.id === matchId) {
+            // create the updated match without the user
+            updatedMatch = {
+                ...match,
+                players: match.players.filter(
+                    player => player.socketId !== user.socketId
+                )
+            }
+
+            // If the user was the owner, set the next player as the new owner
+            updatedMatch.owner =
+                updatedMatch.owner.socketId === user.socketId
+                    ? updatedMatch.players[0]
+                    : updatedMatch.owner
+            return updatedMatch
+        } else return match
+    })
+    return updatedMatch // Return the newly updated match
 }
 
 const findAllMatches = () => {
@@ -34,6 +70,8 @@ const removeMatchById = matchId => {
 
 module.exports = {
     createMatch,
+    addUserToMatch,
+    removeUserFromMatch,
     findAllMatches,
     findMatchById,
     removeMatchById
